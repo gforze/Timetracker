@@ -34,6 +34,18 @@ def printRec():
     global recordList
     for p in recordList: print (p)
 
+def calculateTime(time):
+    time=int(time)
+    if time>=60:
+        hours=int(time/60)
+        minutes=time%60
+        if hours>=24:
+            days=int(hours/24)
+            hours=hours%24
+            return (str(days) + " day(s) " + str(hours) + " hour(s) and " + str(minutes) + " minutes")
+        return (str(hours) + " hour(s) and " + str(minutes) + " minutes")
+    return (str(time) + " minutes")
+
 
 def sumTask(arg):
     sum=0
@@ -47,7 +59,8 @@ def sumTask(arg):
     if sum==0:
         print("No tasks with this name")
     else:
-        print("Total time spent on " + arg + " is " + str(sum) + " minutes")
+        totalTimespent=calculateTime(sum)
+        print("Total time spent on " + arg + " is " + totalTimespent) 
     
 
 
