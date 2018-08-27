@@ -15,12 +15,17 @@ def start(val):
 def stop(val):
         val.duration=format((time.time()- val.startTime)/60, '.2f')
         val.run =0
-        print(val.taskname + " lasted for " + str(val.duration) + " minutes")
+        timepassed=calculateTime(val.duration)
+        print(val.taskname + " lasted for " + timepassed)
 
 def action(arg, val):
     argArray=arg.split(" ")
     if argArray[0]=="start" and len(argArray)==2 and val.run==0:
         val.taskname=argArray[1]
+        print (calculateTime(180))
+        print (calculateTime(182.13))
+        print (calculateTime(40))
+        print (calculateTime(1645))
         start(val)
     elif argArray[0] == "stop" and val.run==1:
         stop(val)
@@ -59,6 +64,18 @@ def writeToRecords(val):
 def status(val):
     val.duration = format((time.time()-val.startTime)/60 ,'.2f')
     print(val.taskname +" has been running for " + str(val.duration) + " minutes")
+
+def calculateTime(time):
+    time=int(time)
+    if time>=60:
+        hours=int(time/60)
+        minutes=time%60
+        if hours>=24:
+            days=int(hours/24)
+            hours=hours%24
+            return (str(days) + " day(s) " + str(hours) + " hour(s) and " + str(minutes) + " minutes")
+        return (str(hours) + " hour(s) and " + str(minutes) + " minutes")
+    return (str(time) + " minutes")
 
 def help():
     print("\n")
