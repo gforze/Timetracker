@@ -93,6 +93,7 @@ def help():
     print("stop - stops the task and writes to records")
     print("r - prints records")
     print("time [arg]- sums time spent on task with the name arg")
+    print("rc - checks if records exist")
     print("close - closes program")
     print("\n")
 
