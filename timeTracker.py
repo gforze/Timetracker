@@ -10,7 +10,6 @@ def start(val):
     val.startTime= time.time()
     val.run=1
     print("Running...")
-    
 
 def stop(val):
         val.duration=format((time.time()- val.startTime)/60, '.2f')
@@ -41,8 +40,17 @@ def action(arg, val):
         help()
     elif argArray[0] == "time" and len(argArray)==2:
         records.sumTask(argArray[1])
+    elif argArray[0] == "rc":
+        doesitExist() 
     else:
         print("Wrong command")
+
+def doesitExist():
+    file = Path("records.txt")
+    if file.exists():
+       print("Records are available") 
+    else:
+        print("File does not exist")
 
 def writeToRecords(val):
     record=records.Record(val.date, val.taskname, val.duration)
