@@ -67,7 +67,8 @@ def writeToRecords(val):
 
 def status(val):
     val.duration = format((time.time()-val.startTime)/60 ,'.2f')
-    print(val.taskname +" has been running for " + str(val.duration) + " minutes")
+    timepassed=calculateTime(val.duration)
+    print(val.taskname +" has been running for " + timepassed) 
 
 def calculateTime(time):
     time=float(time)
