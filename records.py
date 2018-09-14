@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 recordList=[]
-
+taskList = []
 
 class Record(object):
     def __init__(self, date, task, duration):
@@ -20,7 +20,10 @@ def getRecords(num):
     
 def readRecords():
     global recordList
+    global taskList
     recordList=[]
+    taskList=[]
+
     file = open("records.txt", "r")
     for line in file:
         try:
@@ -29,8 +32,18 @@ def readRecords():
         except ValueError:
             print("Fix records file")
     file.close()
+    taskHeaders(recordList, taskList)
     
-    
+def taskHeaders(recList, taList):
+
+     for p in recList:
+        if(p["task"] not in taList):
+            taList.append(p["task"])
+
+def getTasks():
+    for p in taskList: print (p)
+
+ 
 def printRec(num):
     global recordList
     length=len(recordList)

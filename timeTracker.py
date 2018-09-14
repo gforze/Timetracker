@@ -33,8 +33,7 @@ def action(arg, val):
         stop(val)
     elif argArray[0] == "status" and val.run==1:
         status(val)
-    elif argArray[0] =="close":
-        print("Good bye")
+    elif argArray[0] =="close" or argArray[0]=="quit" or argArray[0]=="q":
         sys.exit(0)
     elif argArray[0] =="r":
         file = Path("records.txt")
@@ -53,6 +52,8 @@ def action(arg, val):
             print("No tasks with this name")
         else:
             print(getTime() + "  --Total time spent on " + argArray[1] + " is "+ calculateTime(summedTime)) 
+    elif argArray[0]=="task":
+        records.getTasks()
     else:
         print("Wrong command")
 
@@ -93,7 +94,8 @@ def help():
     print("stop - stops the task and writes to records")
     print("r [arg] - prints arg number of  records from the newest. Arg = 0 or nothing writes all")
     print("time [arg]- sums time spent on task with the name arg")
-    print("close - closes program")
+    print("task - prints all tasks headers on record")
+    print("close or quit - closes program")
     print("\n")
 
 def welcome():
@@ -108,7 +110,10 @@ def welcome():
     print("\n")
 
     if(doesitExist()):
-        print("Records exists".center(columns))
+        records.readRecords()
+        records.taskHeaders(records.recordList, records.taskList)
+        
+        print("Records exists and are loaded".center(columns))
     else:
         print("No records found, write  help in console for list of commands".center(columns))
         print("If it is your first time running the application a records file will be created for you".center(columns))
