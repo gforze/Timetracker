@@ -10,13 +10,19 @@ def start(val):
     val.date=datetime.now().strftime("%d-%m-%y %H:%M")
     val.startTime= time.time()
     val.run=1
-    print("Running...")
+    print(getTime() + "  --Tracking "+val.taskname)
 
 def stop(val):
         val.duration=format((time.time()- val.startTime)/60, '.2f')
         val.run =0
         timepassed=calculateTime(val.duration)
-        print(val.taskname + " lasted for " + timepassed)
+        records.writeToRecords(val)
+        print(getTime() +"  --Tracking stopped, "+val.taskname + " lasted for " + timepassed)
+
+def status(val):
+    val.duration = format((time.time()-val.startTime)/60 ,'.2f')
+    timepassed=calculateTime(val.duration)
+    print(getTime() + "  --Task "+val.taskname +" has been running for " + timepassed) 
 
 def action(arg, val):
     argArray=arg.split(" ")
@@ -25,7 +31,6 @@ def action(arg, val):
         start(val)
     elif argArray[0] == "stop" and val.run==1:
         stop(val)
-        writeToRecords(val)
     elif argArray[0] == "status" and val.run==1:
         status(val)
     elif argArray[0] =="close":
@@ -34,15 +39,25 @@ def action(arg, val):
     elif argArray[0] =="r":
         file = Path("records.txt")
         if file.exists():
-            records.getRecords()
+            if(len(argArray)==2): 
+                records.getRecords(argArray[1])
+            else:
+                records.getRecords(0)
         else:
-            print("Records do not exist")
+            print(getTime() +"  --Records does not exist")
     elif argArray[0] =="help":
         help()
     elif argArray[0] == "time" and len(argArray)==2:
-        records.sumTask(argArray[1])
+        summedTime=records.sumTask(argArray[1])
+        if(summedTime==False):
+            print("No tasks with this name")
+        else:
+            print(getTime() + "  --Total time spent on " + argArray[1] + " is "+ calculateTime(summedTime)) 
     else:
         print("Wrong command")
+
+def getTime():
+    return datetime.now().strftime("%H:%M")
 
 def doesitExist():
     file = Path("records.txt")
@@ -51,23 +66,8 @@ def doesitExist():
     else:
         return False
 
-def writeToRecords(val):
-    record=records.Record(val.date, val.taskname, val.duration)
-    
-    file = Path("records.txt")
-    if file.exists():
-        file = open("records.txt", "a")
-        file.write(json.dumps(record, default=records.jsonDefault) + "\n")
-        file.close()
-    else:
-        file = open("records.txt", "w")
-        file.write(json.dumps(record, default=records.jsonDefault) + "\n")
-        file.close()
 
-def status(val):
-    val.duration = format((time.time()-val.startTime)/60 ,'.2f')
-    timepassed=calculateTime(val.duration)
-    print(val.taskname +" has been running for " + timepassed) 
+
 
 def calculateTime(time):
     time=float(time)
@@ -91,7 +91,7 @@ def help():
     print("start [arg] - starts the timer for a new task with the name arg")
     print("status - prints how long a task has been running")
     print("stop - stops the task and writes to records")
-    print("r - prints records")
+    print("r [arg] - prints arg number of  records from the newest. Arg = 0 or nothing writes all")
     print("time [arg]- sums time spent on task with the name arg")
     print("close - closes program")
     print("\n")
@@ -101,7 +101,7 @@ def welcome():
 
     print("\n")
     print("\n")
-    print("Welcome to TT a simple Timetracking application".center(columns))
+    print("Welcome to TT a simple timetracking application".center(columns))
     print("\n")
     print ("##### TT v0.5 #####".center(columns))
     print("\n")

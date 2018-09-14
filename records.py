@@ -1,7 +1,9 @@
 import json
+from pathlib import Path
 
 recordList=[]
-beenRead=0
+
+
 class Record(object):
     def __init__(self, date, task, duration):
         self.date = date
@@ -12,9 +14,9 @@ def jsonDefault(object):
     return object.__dict__
 
 
-def getRecords():
+def getRecords(num):
     readRecords()
-    printRec()
+    printRec(num)
     
 def readRecords():
     global recordList
@@ -29,22 +31,20 @@ def readRecords():
     file.close()
     
     
-
-def printRec():
+def printRec(num):
     global recordList
-    for p in recordList: print (p)
-
-def calculateTime(time):
-    time=int(time)
-    if time>=60:
-        hours=int(time/60)
-        minutes=time%60
-        if hours>=24:
-            days=int(hours/24)
-            hours=hours%24
-            return (str(days) + " day(s) " + str(hours) + " hour(s) and " + str(minutes) + " minutes")
-        return (str(hours) + " hour(s) and " + str(minutes) + " minutes")
-    return (str(time) + " minutes")
+    length=len(recordList)
+   
+    try:
+        num= int(num) 
+        if(num >=length or num==0):
+            for p in recordList: print (p["date"] +  "     "+ p["task"] +"     "+ p["duration"])
+        else:
+            for i in range(length-num, length):
+                p=recordList[i]
+                print (p["date"] +  "     "+ p["task"] +"     "+ p["duration"])
+    except ValueError:
+        printRec(0)
 
 
 def sumTask(arg):
@@ -57,11 +57,20 @@ def sumTask(arg):
             sum += float(a["duration"])
                
     if sum==0:
-        print("No tasks with this name")
+        return False
     else:
-        totalTimespent=calculateTime(sum)
-        print("Total time spent on " + arg + " is " + totalTimespent) 
+        return sum
+
+def writeToRecords(val):
+    record=Record(val.date, val.taskname, val.duration)
     
-
-
+    file = Path("records.txt")
+    if file.exists():
+        file = open("records.txt", "a")
+        file.write(json.dumps(record, default=jsonDefault) + "\n")
+        file.close()
+    else:
+        file = open("records.txt", "w")
+        file.write(json.dumps(record, default=jsonDefault) + "\n")
+        file.close()
 
