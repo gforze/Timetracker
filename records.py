@@ -63,8 +63,8 @@ def printRec(num):
 def sumTask(arg):
     sum=0
     global recordList
-    
     readRecords()
+
     for a in recordList:
         if arg==a["task"]:
             sum += float(a["duration"])
@@ -86,4 +86,25 @@ def writeToRecords(val):
         file = open("records.txt", "w")
         file.write(json.dumps(record, default=jsonDefault) + "\n")
         file.close()
+
+def recordsTaskname(name):
+    global taskList
+    global recordList
+    for p in recordList:
+        if(name==p["task"]): 
+            print (p["date"] +  "     "+ p["task"] +"     "+ p["duration"])
+
+def recordsDateSort(dateStart, dateEnd):
+    global recordList
+
+    for p in recordList:
+        date=p["date"].split(" ")
+        if(dateStart==date[0]):
+            if(dateEnd != date[0]):
+                print (p["date"] +  "     "+ p["task"] +"     "+ p["duration"])
+            else:
+                break
+        
+    
+
 

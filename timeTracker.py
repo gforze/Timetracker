@@ -24,6 +24,19 @@ def status(val):
     timepassed=calculateTime(val.duration)
     print(getTime() + "  --Task "+val.taskname +" has been running for " + timepassed) 
 
+def recordTask(name):
+    records.recordsTaskname(name)
+    sumTask(name)
+
+def sumTask(arg):
+    summedTime=records.sumTask(arg)
+    if(summedTime==False):
+        print("No tasks with this name")
+    else:
+        print(getTime() + "  --Total time spent on " + arg + " is "+ calculateTime(summedTime)) 
+
+
+
 def action(arg, val):
     argArray=arg.split(" ")
     if argArray[0]=="start" and len(argArray)==2 and val.run==0:
@@ -47,13 +60,11 @@ def action(arg, val):
     elif argArray[0] =="help":
         help()
     elif argArray[0] == "time" and len(argArray)==2:
-        summedTime=records.sumTask(argArray[1])
-        if(summedTime==False):
-            print("No tasks with this name")
-        else:
-            print(getTime() + "  --Total time spent on " + argArray[1] + " is "+ calculateTime(summedTime)) 
+        sumTask(argArray[1])
     elif argArray[0]=="task":
         records.getTasks()
+    elif argArray[0]=="rt" and len(argArray)==2:
+        recordTask(argArray[1])
     else:
         print("Wrong command")
 
@@ -93,6 +104,7 @@ def help():
     print("status - prints how long a task has been running")
     print("stop - stops the task and writes to records")
     print("r [arg] - prints arg number of  records from the newest. Arg = 0 or nothing writes all")
+    print("rt [arg] - lists all records for chosen arg") 
     print("time [arg]- sums time spent on task with the name arg")
     print("task - prints all tasks headers on record")
     print("close or quit - closes program")
@@ -111,7 +123,6 @@ def welcome():
 
     if(doesitExist()):
         records.readRecords()
-        records.taskHeaders(records.recordList, records.taskList)
         
         print("Records exists and are loaded".center(columns))
     else:
@@ -127,4 +138,5 @@ def main():
     while True:
         action(input("~ "), val)
 
-main()  
+if __name__ == "__main__":
+    main()  
