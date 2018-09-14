@@ -2,6 +2,7 @@ from datetime import datetime
 from pathlib import Path
 import sys, time, json
 import records, values
+import shutil
 
 val=values.Values("","", 0, 0, 0)
 
@@ -40,17 +41,15 @@ def action(arg, val):
         help()
     elif argArray[0] == "time" and len(argArray)==2:
         records.sumTask(argArray[1])
-    elif argArray[0] == "rc":
-        doesitExist() 
     else:
         print("Wrong command")
 
 def doesitExist():
     file = Path("records.txt")
     if file.exists():
-       print("Records are available") 
+        return True
     else:
-        print("File does not exist")
+        return False
 
 def writeToRecords(val):
     record=records.Record(val.date, val.taskname, val.duration)
@@ -94,11 +93,33 @@ def help():
     print("stop - stops the task and writes to records")
     print("r - prints records")
     print("time [arg]- sums time spent on task with the name arg")
-    print("rc - checks if records exist")
     print("close - closes program")
     print("\n")
 
-    
-while True:
-    action(input("Waiting for command: "), val)
-  
+def welcome():
+    columns = shutil.get_terminal_size().columns
+
+    print("\n")
+    print("\n")
+    print("Welcome to TT a simple Timetracking application".center(columns))
+    print("\n")
+    print ("##### TT v0.5 #####".center(columns))
+    print("\n")
+    print("\n")
+
+    if(doesitExist()):
+        print("Records exists".center(columns))
+    else:
+        print("No records found, write  help in console for list of commands".center(columns))
+        print("If it is your first time running the application a records file will be created for you".center(columns))
+
+    print("\n")
+    print("\n")
+
+def main():
+    welcome()
+
+    while True:
+        action(input("~ "), val)
+
+main()  
