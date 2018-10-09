@@ -39,12 +39,12 @@ def sumTask(arg):
 
 def action(arg, val):
     argArray=arg.split(" ")
-    if argArray[0]=="start" and len(argArray)==2 and val.run==0:
+    if (argArray[0]=="go" or argArray[0]=="g") and len(argArray)==2 and val.run==0:
         val.taskname=argArray[1]
         start(val)
-    elif argArray[0] == "stop" and val.run==1:
+    elif (argArray[0] == "end" or argArray[0]=="e") and val.run==1:
         stop(val)
-    elif argArray[0] == "status" and val.run==1:
+    elif (argArray[0] == "status" or argArray[0]=="s") and val.run==1:
         status(val)
     elif argArray[0] =="close" or argArray[0]=="quit" or argArray[0]=="q":
         sys.exit(0)
@@ -100,9 +100,9 @@ def calculateTime(time):
 def help():
     print("\n")
     print("Possible commands:")
-    print("start [arg] - starts the timer for a new task with the name arg")
+    print("go [arg] - starts the timer for a new task with the name arg")
     print("status - prints how long a task has been running")
-    print("stop - stops the task and writes to records")
+    print("end - stops the task and writes to records")
     print("r [arg] - prints arg number of  records from the newest. Arg = 0 or nothing writes all")
     print("rt [arg] - lists all records for chosen arg") 
     print("time [arg]- sums time spent on task with the name arg")
