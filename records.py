@@ -1,8 +1,11 @@
 import json
 from pathlib import Path
+from datetime import datetime
 
 recordList=[]
 taskList = []
+sortList=[]
+taskTime=0
 
 class Record(object):
     def __init__(self, date, task, duration):
@@ -96,15 +99,38 @@ def recordsTaskname(name):
 
 def recordsDateSort(dateStart, dateEnd):
     global recordList
+    global sortList
 
-    for p in recordList:
-        date=p["date"].split(" ")
-        if(dateStart==date[0]):
-            if(dateEnd != date[0]):
-                print (p["date"] +  "     "+ p["task"] +"     "+ p["duration"])
-            else:
-                break
+    try:
+        sortList=[]
+        startDate=datetime.strptime(dateStart, "%d-%m-%y").date()
+        endDate=datetime.strptime(dateEnd, "%d-%m-%y").date()
+
+
+        for p in recordList:
+            temp=p["date"].split(" ")
+            date=datetime.strptime(temp[0], "%d-%m-%y").date()
         
-    
+            if(date >= startDate and date <= endDate):
+                sortList.append(p) 
+                
+    except ValueError:
+        print("wrong input")
 
+def sortListPrint(sd,ed):
+    global sortList
+    recordsDateSort(sd, ed)
+    
+    for p in sortList:
+        print (p["date"] +  "     "+ p["task"] +"     "+ p["duration"])
+
+def taskOnDates(taskname, dateStart, dateEnd):
+    recordsDateSort(dateStart, dateEnd)
+    global taskTime
+    taskTime=0
+
+    for p in sortList:
+        if (taskname == p["task"]):
+            taskTime += float(p["duration"])
+            print (p["date"] +  "     "+ p["task"] +"     "+ p["duration"])
 

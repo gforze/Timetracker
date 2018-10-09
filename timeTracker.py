@@ -65,6 +65,11 @@ def action(arg, val):
         records.getTasks()
     elif argArray[0]=="rt" and len(argArray)==2:
         recordTask(argArray[1])
+    elif argArray[0]== "sum" and len(argArray)==3:
+        records.sortListPrint(argArray[1], argArray[2])
+    elif argArray[0]=="sum" and len(argArray)==4:
+        records.taskOnDates(argArray[1], argArray[2], argArray[3])
+        calculateTime(records.taskTime)
     else:
         print("Wrong command")
 
@@ -107,6 +112,7 @@ def help():
     print("rt [arg] - lists all records for chosen arg") 
     print("time [arg]- sums time spent on task with the name arg")
     print("task - prints all tasks headers on record")
+    print("sum [arg1 arg2] - date from and date to on format dd-mm-yy")
     print("close or quit - closes program")
     print("\n")
 
