@@ -1,14 +1,16 @@
 import json
 from pathlib import Path
+from datetime import datetime
 
 recordList=[]
 taskList = []
 
 class Record(object):
-    def __init__(self, date, task, duration):
+    def __init__(self, date, task, duration, comment):
         self.date = date
         self.task = task
         self.duration = duration
+        self.comment = comment
 
 def jsonDefault(object):
     return object.__dict__
@@ -17,7 +19,16 @@ def jsonDefault(object):
 def getRecords(num):
     readRecords()
     printRec(num)
-    
+
+def getTwoday(date):
+    global recordList
+    readRecords()
+    for p in recordList:
+        dagensDato=p["date"].split(" ")[0]
+        if date==dagensDato:
+            print (p["date"] +  "     "+ p["task"] +"     "+ p["duration"] +"  "+p["comment"])
+
+
 def readRecords():
     global recordList
     global taskList
@@ -35,7 +46,6 @@ def readRecords():
     taskHeaders(recordList, taskList)
     
 def taskHeaders(recList, taList):
-
      for p in recList:
         if(p["task"] not in taList):
             taList.append(p["task"])
@@ -51,11 +61,11 @@ def printRec(num):
     try:
         num= int(num) 
         if(num >=length or num==0):
-            for p in recordList: print (p["date"] +  "     "+ p["task"] +"     "+ p["duration"])
+            for p in recordList: print (p["date"] +  "     "+ p["task"] +"     "+ p["duration"] +"  "+p["comment"])
         else:
             for i in range(length-num, length):
                 p=recordList[i]
-                print (p["date"] +  "     "+ p["task"] +"     "+ p["duration"])
+                print (p["date"] +  "     "+ p["task"] +"     "+ p["duration"]+"  "+p["comment"])
     except ValueError:
         printRec(0)
 
@@ -75,7 +85,7 @@ def sumTask(arg):
         return sum
 
 def writeToRecords(val):
-    record=Record(val.date, val.taskname, val.duration)
+    record=Record(val.date, val.taskname, val.duration, val.comment)
     
     file = Path("records.txt")
     if file.exists():
@@ -92,18 +102,18 @@ def recordsTaskname(name):
     global recordList
     for p in recordList:
         if(name==p["task"]): 
-            print (p["date"] +  "     "+ p["task"] +"     "+ p["duration"])
+            print (p["date"] +  "     "+ p["task"] +"     "+ p["duration"]+"  "+p["comment"])
 
-def recordsDateSort(dateStart, dateEnd):
+"""def recordsDateSort(dateStart, dateEnd):
     global recordList
 
     for p in recordList:
         date=p["date"].split(" ")
         if(dateStart==date[0]):
             if(dateEnd != date[0]):
-                print (p["date"] +  "     "+ p["task"] +"     "+ p["duration"])
+                print (p["date"] +  "     "+ p["task"] +"     "+ p["duration"]+"  "+p["comment"])
             else:
-                break
+                break"""
         
     
 
